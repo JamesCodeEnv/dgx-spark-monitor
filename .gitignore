@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+data/
+deploy/bin/
+.env
+tsconfig.tsbuildinfo
+
+# local agent build (macOS binary)
+agent/dspark-agent

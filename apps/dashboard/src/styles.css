@@ -1,0 +1,31 @@
+/* Dashboard global tweaks (inline styles do the layout; this file only holds
+   rules that would be verbose or impossible inline). */
+html,
+body {
+  /* dashboard pages must never scroll horizontally: every block is
+     width-bounded by the responsive grids in src/lib/layout.ts */
+  overflow-x: hidden;
+}
+
+/* Horizontal tab strip: scrollable on narrow screens, no visible scrollbar. */
+.tabbar {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.tabbar::-webkit-scrollbar {
+  display: none;
+}
+.tabbar button {
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+/* Inputs on small screens should not zoom-fight the viewport */
+input,
+button,
+select,
+textarea {
+  font: inherit;
+}

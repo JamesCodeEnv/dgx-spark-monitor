@@ -1,0 +1,47 @@
+{
+  "_comment": "成本页价目表示例。复制到 data/cost-prices.json（默认路径，改文件后热生效）。token 价格单位：元 / 百万 token。schedules 按 effectiveFrom 生效；token 增量按它的时间戳选当时生效的那档，并区分高峰/空闲。peakHours 用本地（tzOffsetHours）半开区间。power 段是电费口径：把 GPU 功耗积成 kWh 再乘电价（这是我们的实际支出，token 费用是对外等价节省）。",
+  "timezone": "Asia/Shanghai",
+  "tzOffsetHours": 8,
+  "currency": "CNY",
+  "currencySymbol": "¥",
+  "unit": "per_1M_tokens",
+  "defaultModel": "deepseek-v4-flash",
+  "peakHours": [
+    { "start": "09:00", "end": "12:00" },
+    { "start": "14:00", "end": "18:00" }
+  ],
+  "models": {
+    "deepseek-v4-flash": {
+      "displayName": "DeepSeek-V4.1-Flash",
+      "schedules": [
+        {
+          "effectiveFrom": "2026-09-10T12:00:00+08:00",
+          "note": "2026-09-10 12:00 降价后",
+          "offPeak": { "hit": 0.02, "miss": 1.0, "out": 4.0 },
+          "peak": { "hit": 0.04, "miss": 2.0, "out": 8.0 }
+        },
+        {
+          "effectiveFrom": "2026-08-17T00:00:00+08:00",
+          "note": "2026-08-17 起引入高峰/空闲（峰谷）",
+          "offPeak": { "hit": 0.05, "miss": 1.5, "out": 4.5 },
+          "peak": { "hit": 0.10, "miss": 3.0, "out": 9.0 }
+        },
+        {
+          "effectiveFrom": "1970-01-01T00:00:00+08:00",
+          "note": "2026-08-17 前单一价（无峰谷）",
+          "offPeak": { "hit": 0.02, "miss": 1.0, "out": 2.0 },
+          "peak": { "hit": 0.02, "miss": 1.0, "out": 2.0 }
+        }
+      ]
+    }
+  },
+  "power": {
+    "_comment": "电费（实际支出）。rate=电价 元/kWh；wallFactor=整机系数（GPU power.draw → 整机功率，含 CPU/内存/风扇/电源损耗）。2.8 为估算：nvidia-smi 只测 GPU 域，据本机（Dell Pro Max with GB10）实测 idle 整机 35–37W/GPU~12W（≈3.0）与整机峰值 240W/GPU 峰值~88W（≈2.7）取 2.8；用实测墙插功率校准。maxGapS=相邻样本间隔超过该秒数视为 agent 掉线缺口，按 0 计。",
+    "enabled": true,
+    "currencySymbol": "¥",
+    "unit": "CNY/kWh",
+    "rate": 0.6,
+    "wallFactor": 2.5,
+    "maxGapS": 120
+  }
+}
